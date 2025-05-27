@@ -1,0 +1,5 @@
+onlyBuiltDependencies:
+  - core-js
+  - electron
+  - es5-ext
+  - spawn-sync
