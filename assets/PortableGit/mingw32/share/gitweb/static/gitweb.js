@@ -7,7 +7,6 @@
  * @license GPLv2 or later
  */
 
-
 /* ============================================================ */
 /* ............................................................ */
 /* Padding */
@@ -26,9 +25,9 @@
  * @returns {String} INPUT prefixed with STR x (WIDTH - INPUT.length)
  */
 function padLeftStr(input, width, str) {
-	var prefix = '';
-	if (typeof str === 'undefined') {
-		ch = '\u00A0'; // using '&nbsp;' doesn't work in all browsers
+	var prefix = "";
+	if (typeof str === "undefined") {
+		ch = "\u00A0"; // using '&nbsp;' doesn't work in all browsers
 	}
 
 	width -= input.toString().length;
@@ -52,8 +51,8 @@ function padLeftStr(input, width, str) {
  */
 function padLeft(input, width, ch) {
 	var s = input + "";
-	if (typeof ch === 'undefined') {
-		ch = '0';
+	if (typeof ch === "undefined") {
+		ch = "0";
 	}
 
 	while (s.length < width) {
@@ -61,7 +60,6 @@ function padLeft(input, width, ch) {
 	}
 	return s;
 }
-
 
 /* ............................................................ */
 /* Handling browser incompatibilities */
@@ -87,7 +85,6 @@ function createRequestObject() {
 	return null;
 }
 
-
 /**
  * Insert rule giving specified STYLE to given SELECTOR at the end of
  * first CSS stylesheet.
@@ -99,19 +96,22 @@ function addCssRule(selector, style) {
 	var stylesheet = document.styleSheets[0];
 
 	var theRules = [];
-	if (stylesheet.cssRules) {     // W3C way
+	if (stylesheet.cssRules) {
+		// W3C way
 		theRules = stylesheet.cssRules;
-	} else if (stylesheet.rules) { // IE way
+	} else if (stylesheet.rules) {
+		// IE way
 		theRules = stylesheet.rules;
 	}
 
-	if (stylesheet.insertRule) {    // W3C way
-		stylesheet.insertRule(selector + ' { ' + style + ' }', theRules.length);
-	} else if (stylesheet.addRule) { // IE way
+	if (stylesheet.insertRule) {
+		// W3C way
+		stylesheet.insertRule(selector + " { " + style + " }", theRules.length);
+	} else if (stylesheet.addRule) {
+		// IE way
 		stylesheet.addRule(selector, style);
 	}
 }
-
 
 /* ............................................................ */
 /* Support for legacy browsers */
@@ -143,16 +143,17 @@ function addCssRule(selector, style) {
  * @param {String} [taghint] limit search to given tags
  * @returns {Node[]} array of matching elements
  */
-if (!('getElementsByClassName' in document)) {
-	document.getElementsByClassName = function (classname, taghint) {
+if (!("getElementsByClassName" in document)) {
+	document.getElementsByClassName = (classname, taghint) => {
 		taghint = taghint || "*";
-		var elements = (taghint === "*" && document.all) ?
-		               document.all :
-		               document.getElementsByTagName(taghint);
+		var elements =
+			taghint === "*" && document.all
+				? document.all
+				: document.getElementsByTagName(taghint);
 		var pattern = new RegExp("(^|\\s)" + classname + "(\\s|$)");
-		var matches= [];
+		var matches = [];
 		for (var i = 0, j = 0, n = elements.length; i < n; i++) {
-			var el= elements[i];
+			var el = elements[i];
 			if (el.className && pattern.test(el.className)) {
 				// matches.push(el);
 				matches[j] = el;
@@ -162,7 +163,6 @@ if (!('getElementsByClassName' in document)) {
 		return matches;
 	};
 } // end if
-
 
 /* ............................................................ */
 /* unquoting/unescaping filenames */
@@ -190,19 +190,19 @@ function unquote(str) {
 		var es = {
 			// character escape codes, aka escape sequences (from C)
 			// replacements are to some extent JavaScript specific
-			t: "\t",   // tab            (HT, TAB)
-			n: "\n",   // newline        (NL)
-			r: "\r",   // return         (CR)
-			f: "\f",   // form feed      (FF)
-			b: "\b",   // backspace      (BS)
+			t: "\t", // tab            (HT, TAB)
+			n: "\n", // newline        (NL)
+			r: "\r", // return         (CR)
+			f: "\f", // form feed      (FF)
+			b: "\b", // backspace      (BS)
 			a: "\x07", // alarm (bell)   (BEL)
 			e: "\x1B", // escape         (ESC)
-			v: "\v"    // vertical tab   (VT)
+			v: "\v", // vertical tab   (VT)
 		};
 
 		if (seq.search(octEscRe) !== -1) {
 			// octal char sequence
-			return String.fromCharCode(parseInt(seq, 8));
+			return String.fromCharCode(Number.parseInt(seq, 8));
 		} else if (seq in es) {
 			// C escape sequence, aka character escape code
 			return es[seq];
@@ -215,8 +215,7 @@ function unquote(str) {
 	if (match) {
 		str = match[1];
 		// perhaps str = eval('"'+str+'"'); would be enough?
-		str = str.replace(escCodeRe,
-			function (substr, p1, offset, s) { return unq(p1); });
+		str = str.replace(escCodeRe, (substr, p1, offset, s) => unq(p1));
 	}
 	return str;
 }
@@ -230,7 +229,6 @@ function unquote(str) {
  * @fileOverview Datetime manipulation: parsing and formatting
  * @license GPLv2 or later
  */
-
 
 /* ............................................................ */
 /* parsing and retrieving datetime related information */
@@ -251,11 +249,11 @@ var tzRe = /^([+\-])([0-9][0-9])([0-9][0-9])$/;
  */
 function timezoneOffset(timezoneInfo) {
 	var match = tzRe.exec(timezoneInfo);
-	var tz_sign = (match[1] === '-' ? -1 : +1);
-	var tz_hour = parseInt(match[2],10);
-	var tz_min  = parseInt(match[3],10);
+	var tz_sign = match[1] === "-" ? -1 : +1;
+	var tz_hour = Number.parseInt(match[2], 10);
+	var tz_min = Number.parseInt(match[3], 10);
 
-	return tz_sign*(((tz_hour*60) + tz_min)*60);
+	return tz_sign * ((tz_hour * 60 + tz_min) * 60);
 }
 
 /**
@@ -266,7 +264,7 @@ function timezoneOffset(timezoneInfo) {
 function localTimezoneOffset() {
 	// getTimezoneOffset returns the time-zone offset from UTC,
 	// in _minutes_, for the current locale
-	return ((new Date()).getTimezoneOffset() * -60);
+	return new Date().getTimezoneOffset() * -60;
 }
 
 /**
@@ -275,11 +273,10 @@ function localTimezoneOffset() {
  * @returns {String} locat timezone as -/+ZZZZ
  */
 function localTimezoneInfo() {
-	var tzOffsetMinutes = (new Date()).getTimezoneOffset() * -1;
+	var tzOffsetMinutes = new Date().getTimezoneOffset() * -1;
 
 	return formatTimezoneInfo(0, tzOffsetMinutes);
 }
-
 
 /**
  * Parse RFC-2822 date into a Unix timestamp (into epoch)
@@ -293,7 +290,6 @@ function parseRFC2822Date(date) {
 	// and returns number of _milli_seconds since January 1, 1970, 00:00:00 UTC
 	return Date.parse(date) / 1000;
 }
-
 
 /* ............................................................ */
 /* formatting date */
@@ -312,20 +308,20 @@ function parseRFC2822Date(date) {
  */
 function formatTimezoneInfo(hours, minutes, sep) {
 	minutes = minutes || 0; // to be able to use formatTimezoneInfo(hh)
-	sep = sep || ''; // default format is +/-ZZZZ
+	sep = sep || ""; // default format is +/-ZZZZ
 
 	if (minutes < 0 || minutes > 59) {
 		hours = minutes > 0 ? Math.floor(minutes / 60) : Math.ceil(minutes / 60);
-		minutes = Math.abs(minutes - 60*hours); // sign of minutes is sign of hours
+		minutes = Math.abs(minutes - 60 * hours); // sign of minutes is sign of hours
 		// NOTE: this works correctly because there is no UTC-00:30 timezone
 	}
 
-	var tzSign = hours >= 0 ? '+' : '-';
+	var tzSign = hours >= 0 ? "+" : "-";
 	if (hours < 0) {
 		hours = -hours; // sign is stored in tzSign
 	}
 
-	return tzSign + padLeft(hours, 2, '0') + sep + padLeft(minutes, 2, '0');
+	return tzSign + padLeft(hours, 2, "0") + sep + padLeft(minutes, 2, "0");
 }
 
 /**
@@ -334,14 +330,13 @@ function formatTimezoneInfo(hours, minutes, sep) {
  */
 function normalizeTimezoneInfo(timezoneInfo) {
 	switch (timezoneInfo) {
-	case 'utc':
-		return '+0000';
-	case 'local': // 'local' is browser timezone
-		return localTimezoneInfo();
+		case "utc":
+			return "+0000";
+		case "local": // 'local' is browser timezone
+			return localTimezoneInfo();
 	}
 	return timezoneInfo;
 }
-
 
 /**
  * return date in local time formatted in iso-8601 like format
@@ -353,18 +348,21 @@ function normalizeTimezoneInfo(timezoneInfo) {
  */
 function formatDateISOLocal(epoch, timezoneInfo) {
 	// date corrected by timezone
-	var localDate = new Date(1000 * (epoch +
-		timezoneOffset(timezoneInfo)));
+	var localDate = new Date(1000 * (epoch + timezoneOffset(timezoneInfo)));
 	var localDateStr = // e.g. '2005-08-07'
-		localDate.getUTCFullYear()                 + '-' +
-		padLeft(localDate.getUTCMonth()+1, 2, '0') + '-' +
-		padLeft(localDate.getUTCDate(),    2, '0');
+		localDate.getUTCFullYear() +
+		"-" +
+		padLeft(localDate.getUTCMonth() + 1, 2, "0") +
+		"-" +
+		padLeft(localDate.getUTCDate(), 2, "0");
 	var localTimeStr = // e.g. '21:49:46'
-		padLeft(localDate.getUTCHours(),   2, '0') + ':' +
-		padLeft(localDate.getUTCMinutes(), 2, '0') + ':' +
-		padLeft(localDate.getUTCSeconds(), 2, '0');
+		padLeft(localDate.getUTCHours(), 2, "0") +
+		":" +
+		padLeft(localDate.getUTCMinutes(), 2, "0") +
+		":" +
+		padLeft(localDate.getUTCSeconds(), 2, "0");
 
-	return localDateStr + ' ' + localTimeStr + ' ' + timezoneInfo;
+	return localDateStr + " " + localTimeStr + " " + timezoneInfo;
 }
 
 /**
@@ -378,23 +376,42 @@ function formatDateISOLocal(epoch, timezoneInfo) {
  */
 function formatDateRFC2882(epoch, timezoneInfo, padDay) {
 	// A short textual representation of a month, three letters
-	var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+	var months = [
+		"Jan",
+		"Feb",
+		"Mar",
+		"Apr",
+		"May",
+		"Jun",
+		"Jul",
+		"Aug",
+		"Sep",
+		"Oct",
+		"Nov",
+		"Dec",
+	];
 	// A textual representation of a day, three letters
 	var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 	// date corrected by timezone
-	var localDate = new Date(1000 * (epoch +
-		timezoneOffset(timezoneInfo)));
+	var localDate = new Date(1000 * (epoch + timezoneOffset(timezoneInfo)));
 	var localDateStr = // e.g. 'Sun, 7 Aug 2005' or 'Sun, 07 Aug 2005'
-		days[localDate.getUTCDay()] + ', ' +
-		(padDay ? padLeft(localDate.getUTCDate(),2,'0') : localDate.getUTCDate()) + ' ' +
-		months[localDate.getUTCMonth()] + ' ' +
+		days[localDate.getUTCDay()] +
+		", " +
+		(padDay
+			? padLeft(localDate.getUTCDate(), 2, "0")
+			: localDate.getUTCDate()) +
+		" " +
+		months[localDate.getUTCMonth()] +
+		" " +
 		localDate.getUTCFullYear();
 	var localTimeStr = // e.g. '21:49:46'
-		padLeft(localDate.getUTCHours(),   2, '0') + ':' +
-		padLeft(localDate.getUTCMinutes(), 2, '0') + ':' +
-		padLeft(localDate.getUTCSeconds(), 2, '0');
+		padLeft(localDate.getUTCHours(), 2, "0") +
+		":" +
+		padLeft(localDate.getUTCMinutes(), 2, "0") +
+		":" +
+		padLeft(localDate.getUTCSeconds(), 2, "0");
 
-	return localDateStr + ' ' + localTimeStr + ' ' + timezoneInfo;
+	return localDateStr + " " + localTimeStr + " " + timezoneInfo;
 }
 
 /* end of datetime.js */
@@ -408,7 +425,6 @@ function formatDateRFC2882(epoch, timezoneInfo, padDay) {
  * JavaScript for Web Developers" by Nicholas C. Zakas and cookie
  * plugin from jQuery (dual licensed under the MIT and GPL licenses)
  */
-
 
 /**
  * Create a cookie with the given name and value,
@@ -442,39 +458,40 @@ function formatDateRFC2882(epoch, timezoneInfo, padDay) {
 function setCookie(sName, sValue, options) {
 	options = options || {};
 	if (sValue === null) {
-		sValue = '';
-		option.expires = 'delete';
+		sValue = "";
+		option.expires = "delete";
 	}
 
-	var sCookie = sName + '=' + encodeURIComponent(sValue);
+	var sCookie = sName + "=" + encodeURIComponent(sValue);
 
 	if (options.expires) {
-		var oExpires = options.expires, sDate;
-		if (oExpires === 'delete') {
-			sDate = 'Thu, 01 Jan 1970 00:00:00 GMT';
-		} else if (typeof oExpires === 'string') {
+		var oExpires = options.expires,
+			sDate;
+		if (oExpires === "delete") {
+			sDate = "Thu, 01 Jan 1970 00:00:00 GMT";
+		} else if (typeof oExpires === "string") {
 			sDate = oExpires;
 		} else {
 			var oDate;
-			if (typeof oExpires === 'number') {
+			if (typeof oExpires === "number") {
 				oDate = new Date();
-				oDate.setTime(oDate.getTime() + (oExpires * 24 * 60 * 60 * 1000)); // days to ms
+				oDate.setTime(oDate.getTime() + oExpires * 24 * 60 * 60 * 1000); // days to ms
 			} else {
 				oDate = oExpires;
 			}
 			sDate = oDate.toGMTString();
 		}
-		sCookie += '; expires=' + sDate;
+		sCookie += "; expires=" + sDate;
 	}
 
 	if (options.path) {
-		sCookie += '; path=' + (options.path);
+		sCookie += "; path=" + options.path;
 	}
 	if (options.domain) {
-		sCookie += '; domain=' + (options.domain);
+		sCookie += "; domain=" + options.domain;
 	}
 	if (options.secure) {
-		sCookie += '; secure';
+		sCookie += "; secure";
 	}
 	document.cookie = sCookie;
 }
@@ -486,10 +503,10 @@ function setCookie(sName, sValue, options) {
  * @returns {String|null} The string value stored in a cookie
  */
 function getCookie(sName) {
-	var sRE = '(?:; )?' + sName + '=([^;]*);?';
+	var sRE = "(?:; )?" + sName + "=([^;]*);?";
 	var oRE = new RegExp(sRE);
 	if (oRE.test(document.cookie)) {
-		return decodeURIComponent(RegExp['$1']);
+		return decodeURIComponent(RegExp["$1"]);
 	} else {
 		return null;
 	}
@@ -506,9 +523,9 @@ function getCookie(sName) {
  */
 function deleteCookie(sName, options) {
 	options = options || {};
-	options.expires = 'delete';
+	options.expires = "delete";
 
-	setCookie(sName, '', options);
+	setCookie(sName, "", options);
 }
 
 /* end of cookies.js */
@@ -520,7 +537,6 @@ function deleteCookie(sName, options) {
  * @fileOverview Detect if JavaScript is enabled, and pass it to server-side
  * @license GPLv2 or later
  */
-
 
 /* ============================================================ */
 /* Manipulating links */
@@ -548,8 +564,10 @@ function fixLinks() {
 	for (var i = 0, len = allLinks.length; i < len; i++) {
 		var link = allLinks[i];
 		if (!jsExceptionsRe.test(link)) {
-			link.href = link.href.replace(/(#|$)/,
-				(link.href.indexOf('?') === -1 ? '?' : ';') + 'js=1$1');
+			link.href = link.href.replace(
+				/(#|$)/,
+				(link.href.indexOf("?") === -1 ? "?" : ";") + "js=1$1",
+			);
 		}
 	}
 }
@@ -590,12 +608,11 @@ function onloadTZSetup(tzDefault, tzCookieInfo, tzClassName) {
 
 	// server-side of gitweb produces datetime in UTC,
 	// so if tz is 'utc' there is no need for changes
-	var nochange = tz === 'utc';
+	var nochange = tz === "utc";
 
 	// adjust dates to use specified common timezone
 	fixDatetimeTZ(tz, tzClassName, nochange);
 }
-
 
 /* ...................................................................... */
 /* Changing dates to use requested timezone */
@@ -622,7 +639,7 @@ function fixDatetimeTZ(tz, tzClassName, nochange) {
 	for (var i = 0, len = classesFound.length; i < len; i++) {
 		var curElement = classesFound[i];
 
-		curElement.title = 'Click to change timezone';
+		curElement.title = "Click to change timezone";
 		if (!nochange) {
 			// we use *.firstChild.data (W3C DOM) instead of *.innerHTML
 			// as the latter doesn't always work everywhere in every browser
@@ -633,7 +650,6 @@ function fixDatetimeTZ(tz, tzClassName, nochange) {
 		}
 	}
 }
-
 
 /* ...................................................................... */
 /* Adding triggers, generating timezone menu, displaying and hiding */
@@ -651,13 +667,19 @@ function fixDatetimeTZ(tz, tzClassName, nochange) {
  */
 function addChangeTZ(tzSelected, tzCookieInfo, tzClassName) {
 	// make link to timezone UI discoverable
-	addCssRule('.'+tzClassName + ':hover',
-	           'text-decoration: underline; cursor: help;');
+	addCssRule(
+		"." + tzClassName + ":hover",
+		"text-decoration: underline; cursor: help;",
+	);
 
 	// create form for selecting timezone (to be saved in a cookie)
 	var tzSelectFragment = document.createDocumentFragment();
-	tzSelectFragment = createChangeTZForm(tzSelectFragment,
-	                                      tzSelected, tzCookieInfo, tzClassName);
+	tzSelectFragment = createChangeTZForm(
+		tzSelectFragment,
+		tzSelected,
+		tzCookieInfo,
+		tzClassName,
+	);
 
 	// event delegation handler for timezone selection UI (clicking on entry)
 	// see http://www.nczonline.net/blog/2009/06/30/event-delegation-in-javascript/
@@ -670,12 +692,12 @@ function addChangeTZ(tzSelected, tzCookieInfo, tzClassName) {
 		var target = event.target || event.srcElement;
 
 		switch (target.className) {
-		case tzClassName:
-			// don't display timezone menu if it is already displayed
-			if (tzSelectFragment.childNodes.length > 0) {
-				displayChangeTZForm(target, tzSelectFragment);
-			}
-			break;
+			case tzClassName:
+				// don't display timezone menu if it is already displayed
+				if (tzSelectFragment.childNodes.length > 0) {
+					displayChangeTZForm(target, tzSelectFragment);
+				}
+				break;
 		} // end switch
 	};
 }
@@ -689,22 +711,27 @@ function addChangeTZ(tzSelected, tzCookieInfo, tzClassName) {
  * @param {Object} tzCookieInfo: object literal with info about cookie to store timezone
  * @returns {DocumentFragment}
  */
-function createChangeTZForm(documentFragment, tzSelected, tzCookieInfo, tzClassName) {
+function createChangeTZForm(
+	documentFragment,
+	tzSelected,
+	tzCookieInfo,
+	tzClassName,
+) {
 	var div = document.createElement("div");
-	div.className = 'popup';
+	div.className = "popup";
 
 	/* '<div class="close-button" title="(click on this box to close)">X</div>' */
-	var closeButton = document.createElement('div');
-	closeButton.className = 'close-button';
-	closeButton.title = '(click on this box to close)';
-	closeButton.appendChild(document.createTextNode('X'));
+	var closeButton = document.createElement("div");
+	closeButton.className = "close-button";
+	closeButton.title = "(click on this box to close)";
+	closeButton.appendChild(document.createTextNode("X"));
 	closeButton.onclick = closeTZFormHandler(documentFragment, tzClassName);
 	div.appendChild(closeButton);
 
 	/* 'Select timezone: <br clear="all">' */
-	div.appendChild(document.createTextNode('Select timezone: '));
-	var br = document.createElement('br');
-	br.clear = 'all';
+	div.appendChild(document.createTextNode("Select timezone: "));
+	var br = document.createElement("br");
+	br.clear = "all";
 	div.appendChild(br);
 
 	/* '<select name="tzoffset">
@@ -717,14 +744,17 @@ function createChangeTZForm(documentFragment, tzSelected, tzCookieInfo, tzClassN
 	select.name = "tzoffset";
 	//select.style.clear = 'all';
 	select.appendChild(generateTZOptions(tzSelected));
-	select.onchange = selectTZHandler(documentFragment, tzCookieInfo, tzClassName);
+	select.onchange = selectTZHandler(
+		documentFragment,
+		tzCookieInfo,
+		tzClassName,
+	);
 	div.appendChild(select);
 
 	documentFragment.appendChild(div);
 
 	return documentFragment;
 }
-
 
 /**
  * Hide (remove from DOM) timezone change UI, ensuring that it is not
@@ -738,34 +768,37 @@ function createChangeTZForm(documentFragment, tzSelected, tzCookieInfo, tzClassN
 function removeChangeTZForm(documentFragment, target, tzClassName) {
 	// find containing element, where we appended timezone selection UI
 	// `target' is somewhere inside timezone menu
-	var container = target.parentNode, popup = target;
-	while (container &&
-	       container.className !== tzClassName) {
+	var container = target.parentNode,
+		popup = target;
+	while (container && container.className !== tzClassName) {
 		popup = container;
 		container = container.parentNode;
 	}
 	// safety check if we found correct container,
 	// and if it isn't deleted already
-	if (!container || !popup ||
-	    container.className !== tzClassName ||
-	    popup.className     !== 'popup') {
+	if (
+		!container ||
+		!popup ||
+		container.className !== tzClassName ||
+		popup.className !== "popup"
+	) {
 		return documentFragment;
 	}
 
 	// timezone selection UI was appended as last child
 	// see also displayChangeTZForm function
 	var removed = popup.parentNode.removeChild(popup);
-	if (documentFragment.firstChild !== removed) { // the only child
+	if (documentFragment.firstChild !== removed) {
+		// the only child
 		// re-append it so it would be available for next time
 		documentFragment.appendChild(removed);
 	}
 	// all of inline style was added by this script
 	// it is not really needed to remove it, but it is a good practice
-	container.removeAttribute('style');
+	container.removeAttribute("style");
 
 	return documentFragment;
 }
-
 
 /**
  * Display UI for changing common timezone for dates in gitweb output.
@@ -776,13 +809,12 @@ function removeChangeTZForm(documentFragment, target, tzClassName) {
  */
 function displayChangeTZForm(target, tzSelectFragment) {
 	// for absolute positioning to be related to target element
-	target.style.position = 'relative';
-	target.style.display = 'inline-block';
+	target.style.position = "relative";
+	target.style.display = "inline-block";
 
 	// show/display UI for changing timezone
 	target.appendChild(tzSelectFragment);
 }
-
 
 /* ...................................................................... */
 /* List of timezones for timezone selection menu */
@@ -794,16 +826,16 @@ function displayChangeTZForm(target, tzSelectFragment) {
  */
 function generateTZList() {
 	var timezones = [
-		{ value: "utc",   descr: "UTC/GMT"},
-		{ value: "local", descr: "Local (per browser)"}
+		{ value: "utc", descr: "UTC/GMT" },
+		{ value: "local", descr: "Local (per browser)" },
 	];
 
 	// generate all full hour timezones (no fractional timezones)
 	for (var x = -12, idx = timezones.length; x <= +14; x++, idx++) {
-		var hours = (x >= 0 ? '+' : '-') + padLeft(x >=0 ? x : -x, 2);
-		timezones[idx] = { value: hours + '00', descr: 'UTC' + hours + ':00'};
+		var hours = (x >= 0 ? "+" : "-") + padLeft(x >= 0 ? x : -x, 2);
+		timezones[idx] = { value: hours + "00", descr: "UTC" + hours + ":00" };
 		if (x === 0) {
-			timezones[idx].descr = 'UTC\u00B100:00'; // 'UTC&plusmn;00:00'
+			timezones[idx].descr = "UTC\u00B100:00"; // 'UTC&plusmn;00:00'
 		}
 	}
 
@@ -835,7 +867,6 @@ function generateTZOptions(tzSelected) {
 	return elems;
 }
 
-
 /* ...................................................................... */
 /* Event handlers and/or their generators */
 
@@ -851,7 +882,7 @@ function generateTZOptions(tzSelected) {
  */
 function selectTZHandler(tzSelectFragment, tzCookieInfo, tzClassName) {
 	//return function selectTZ(event) {
-	return function (event) {
+	return (event) => {
 		event = event || window.event;
 		var target = event.target || event.srcElement;
 
@@ -876,7 +907,7 @@ function selectTZHandler(tzSelectFragment, tzCookieInfo, tzClassName) {
  */
 function closeTZFormHandler(tzSelectFragment, tzClassName) {
 	//return function closeTZForm(event) {
-	return function (event) {
+	return (event) => {
 		event = event || window.event;
 		var target = event.target || event.srcElement;
 
@@ -912,7 +943,6 @@ function closeTZFormHandler(tzSelectFragment, tzClassName) {
  * equivalent using DOM 2 Core is usually shown in comments.
  */
 
-
 /* ............................................................ */
 /* utility/helper functions (and variables) */
 
@@ -939,7 +969,7 @@ function Commit(sha1) {
 /* progress info, timing, error reporting */
 
 var blamedLines = 0;
-var totalLines  = '???';
+var totalLines = "???";
 var div_progress_bar;
 var div_progress_info;
 
@@ -951,13 +981,13 @@ var div_progress_info;
  */
 function countLines() {
 	var table =
-		document.getElementById('blame_table') ||
-		document.getElementsByTagName('table')[0];
+		document.getElementById("blame_table") ||
+		document.getElementsByTagName("table")[0];
 
 	if (table) {
-		return table.getElementsByTagName('tr').length - 1; // for header
+		return table.getElementsByTagName("tr").length - 1; // for header
 	} else {
-		return '...';
+		return "...";
 	}
 }
 
@@ -968,31 +998,35 @@ function countLines() {
  */
 function updateProgressInfo() {
 	if (!div_progress_info) {
-		div_progress_info = document.getElementById('progress_info');
+		div_progress_info = document.getElementById("progress_info");
 	}
 	if (!div_progress_bar) {
-		div_progress_bar = document.getElementById('progress_bar');
+		div_progress_bar = document.getElementById("progress_bar");
 	}
 	if (!div_progress_info && !div_progress_bar) {
 		return;
 	}
 
-	var percentage = Math.floor(100.0*blamedLines/totalLines);
+	var percentage = Math.floor((100.0 * blamedLines) / totalLines);
 
 	if (div_progress_info) {
-		div_progress_info.firstChild.data  = blamedLines + ' / ' + totalLines +
-			' (' + padLeftStr(percentage, 3, '\u00A0') + '%)';
+		div_progress_info.firstChild.data =
+			blamedLines +
+			" / " +
+			totalLines +
+			" (" +
+			padLeftStr(percentage, 3, "\u00A0") +
+			"%)";
 	}
 
 	if (div_progress_bar) {
 		//div_progress_bar.setAttribute('style', 'width: '+percentage+'%;');
-		div_progress_bar.style.width = percentage + '%';
+		div_progress_bar.style.width = percentage + "%";
 	}
 }
 
-
-var t_interval_server = '';
-var cmds_server = '';
+var t_interval_server = "";
+var cmds_server = "";
 var t0 = new Date();
 
 /**
@@ -1001,20 +1035,23 @@ var t0 = new Date();
  * @globals t0, t_interval_server, cmds_server
  */
 function writeTimeInterval() {
-	var info_time = document.getElementById('generating_time');
+	var info_time = document.getElementById("generating_time");
 	if (!info_time || !t_interval_server) {
 		return;
 	}
 	var t1 = new Date();
-	info_time.firstChild.data += ' + (' +
-		t_interval_server + ' sec server blame_data / ' +
-		(t1.getTime() - t0.getTime())/1000 + ' sec client JavaScript)';
+	info_time.firstChild.data +=
+		" + (" +
+		t_interval_server +
+		" sec server blame_data / " +
+		(t1.getTime() - t0.getTime()) / 1000 +
+		" sec client JavaScript)";
 
-	var info_cmds = document.getElementById('generating_cmd');
+	var info_cmds = document.getElementById("generating_cmd");
 	if (!info_time || !cmds_server) {
 		return;
 	}
-	info_cmds.firstChild.data += ' + ' + cmds_server;
+	info_cmds.firstChild.data += " + " + cmds_server;
 }
 
 /**
@@ -1025,10 +1062,10 @@ function writeTimeInterval() {
  */
 function errorInfo(str) {
 	if (!div_progress_info) {
-		div_progress_info = document.getElementById('progress_info');
+		div_progress_info = document.getElementById("progress_info");
 	}
 	if (div_progress_info) {
-		div_progress_info.className = 'error';
+		div_progress_info.className = "error";
 		div_progress_info.firstChild.data = str;
 	}
 }
@@ -1060,7 +1097,7 @@ function getColorNo(tr) {
 	if (className) {
 		var match = colorRe.exec(className);
 		if (match) {
-			return parseInt(match[1], 10);
+			return Number.parseInt(match[1], 10);
 		}
 	}
 	return null;
@@ -1080,11 +1117,11 @@ function chooseColorNoFrom() {
 	// choose the color which is least used
 	var colorNo = arguments[0];
 	for (var i = 1; i < arguments.length; i++) {
-		if (colorsFreq[arguments[i]-1] < colorsFreq[colorNo-1]) {
+		if (colorsFreq[arguments[i] - 1] < colorsFreq[colorNo - 1]) {
 			colorNo = arguments[i];
 		}
 	}
-	colorsFreq[colorNo-1]++;
+	colorsFreq[colorNo - 1]++;
 	return colorNo;
 }
 
@@ -1101,11 +1138,10 @@ function findColorNo(tr_prev, tr_next) {
 	var color_prev = getColorNo(tr_prev);
 	var color_next = getColorNo(tr_next);
 
-
 	// neither of neighbors has color set
 	// THEN we can use any of 3 possible colors
 	if (!color_prev && !color_next) {
-		return chooseColorNoFrom(1,2,3);
+		return chooseColorNoFrom(1, 2, 3);
 	}
 
 	// either both neighbors have the same color,
@@ -1120,12 +1156,12 @@ function findColorNo(tr_prev, tr_next) {
 		color = color_prev;
 	}
 	if (color) {
-		return chooseColorNoFrom((color % 3) + 1, ((color+1) % 3) + 1);
+		return chooseColorNoFrom((color % 3) + 1, ((color + 1) % 3) + 1);
 	}
 
 	// neighbors have different colors
 	// THEN there is only one color left
-	return (3 - ((color_prev + color_next) % 3));
+	return 3 - ((color_prev + color_next) % 3);
 }
 
 /* ............................................................ */
@@ -1139,7 +1175,7 @@ function findColorNo(tr_prev, tr_next) {
  * @returns {Boolean} true if TR is first in commit group
  */
 function isStartOfGroup(tr) {
-	return tr.firstChild.className === 'sha1';
+	return tr.firstChild.className === "sha1";
 }
 
 /**
@@ -1149,24 +1185,25 @@ function isStartOfGroup(tr) {
  * @globals colorRe
  */
 function fixColorsAndGroups() {
-	var colorClasses = ['light', 'dark'];
+	var colorClasses = ["light", "dark"];
 	var linenum = 1;
 	var tr, prev_group;
 	var colorClass = 0;
 	var table =
-		document.getElementById('blame_table') ||
-		document.getElementsByTagName('table')[0];
+		document.getElementById("blame_table") ||
+		document.getElementsByTagName("table")[0];
 
-	while ((tr = document.getElementById('l'+linenum))) {
-	// index origin is 0, which is table header; start from 1
-	//while ((tr = table.rows[linenum])) { // <- it is slower
+	while ((tr = document.getElementById("l" + linenum))) {
+		// index origin is 0, which is table header; start from 1
+		//while ((tr = table.rows[linenum])) { // <- it is slower
 		if (isStartOfGroup(tr, linenum, document)) {
-			if (prev_group &&
-			    prev_group.firstChild.firstChild.href ===
-			            tr.firstChild.firstChild.href) {
+			if (
+				prev_group &&
+				prev_group.firstChild.firstChild.href === tr.firstChild.firstChild.href
+			) {
 				// we have to concatenate groups
 				var prev_rows = prev_group.firstChild.rowSpan || 1;
-				var curr_rows =         tr.firstChild.rowSpan || 1;
+				var curr_rows = tr.firstChild.rowSpan || 1;
 				prev_group.firstChild.rowSpan = prev_rows + curr_rows;
 				//tr.removeChild(tr.firstChild);
 				tr.deleteCell(0); // DOM2 HTML way
@@ -1180,7 +1217,6 @@ function fixColorsAndGroups() {
 		linenum++;
 	}
 }
-
 
 /* ============================================================ */
 /* main part: parsing response */
@@ -1212,19 +1248,21 @@ function handleLine(commit, group) {
 	// format date and time string only once per commit
 	if (!commit.info) {
 		/* e.g. 'Kay Sievers, 2005-08-07 21:49:46 +0200' */
-		commit.info = commit.author + ', ' +
+		commit.info =
+			commit.author +
+			", " +
 			formatDateISOLocal(commit.authorTime, commit.authorTimezone);
 	}
 
 	// color depends on group of lines, not only on blamed commit
 	var colorNo = findColorNo(
-		document.getElementById('l'+(resline-1)),
-		document.getElementById('l'+(resline+group.numlines))
+		document.getElementById("l" + (resline - 1)),
+		document.getElementById("l" + (resline + group.numlines)),
 	);
 
 	// loop over lines in commit group
 	for (var i = 0; i < group.numlines; i++, resline++) {
-		var tr = document.getElementById('l'+resline);
+		var tr = document.getElementById("l" + resline);
 		if (!tr) {
 			break;
 		}
@@ -1235,22 +1273,22 @@ function handleLine(commit, group) {
 			  <td class="pre"># times (my ext3 doesn&#39;t).</td>
 			</tr>
 		*/
-		var td_sha1  = tr.firstChild;
-		var a_sha1   = td_sha1.firstChild;
+		var td_sha1 = tr.firstChild;
+		var a_sha1 = td_sha1.firstChild;
 		var a_linenr = td_sha1.nextSibling.firstChild;
 
 		/* <tr id="l123" class=""> */
-		var tr_class = '';
+		var tr_class = "";
 		if (colorNo !== null) {
-			tr_class = 'color'+colorNo;
+			tr_class = "color" + colorNo;
 		}
 		if (commit.boundary) {
-			tr_class += ' boundary';
+			tr_class += " boundary";
 		}
 		if (commit.nprevious === 0) {
-			tr_class += ' no-previous';
+			tr_class += " no-previous";
 		} else if (commit.nprevious > 1) {
-			tr_class += ' multiple-previous';
+			tr_class += " multiple-previous";
 		}
 		tr.className = tr_class;
 
@@ -1259,20 +1297,18 @@ function handleLine(commit, group) {
 			td_sha1.title = commit.info;
 			td_sha1.rowSpan = group.numlines;
 
-			a_sha1.href = projectUrl + 'a=commit;h=' + commit.sha1;
+			a_sha1.href = projectUrl + "a=commit;h=" + commit.sha1;
 			if (a_sha1.firstChild) {
 				a_sha1.firstChild.data = commit.sha1.substr(0, 8);
 			} else {
-				a_sha1.appendChild(
-					document.createTextNode(commit.sha1.substr(0, 8)));
+				a_sha1.appendChild(document.createTextNode(commit.sha1.substr(0, 8)));
 			}
 			if (group.numlines >= 2) {
 				var fragment = document.createDocumentFragment();
-				var br   = document.createElement("br");
+				var br = document.createElement("br");
 				var match = commit.author.match(/\b([A-Z])\B/g);
 				if (match) {
-					var text = document.createTextNode(
-							match.join(''));
+					var text = document.createTextNode(match.join(""));
 				}
 				if (br && text) {
 					var elem = fragment || td_sha1;
@@ -1289,14 +1325,18 @@ function handleLine(commit, group) {
 		}
 
 		/* <td class="linenr"><a class="linenr" href="?">123</a></td> */
-		var linenr_commit =
-			('previous' in commit ? commit.previous : commit.sha1);
+		var linenr_commit = "previous" in commit ? commit.previous : commit.sha1;
 		var linenr_filename =
-			('file_parent' in commit ? commit.file_parent : commit.filename);
-		a_linenr.href = projectUrl + 'a=blame_incremental' +
-			';hb=' + linenr_commit +
-			';f='  + encodeURIComponent(linenr_filename) +
-			'#l' + (group.srcline + i);
+			"file_parent" in commit ? commit.file_parent : commit.filename;
+		a_linenr.href =
+			projectUrl +
+			"a=blame_incremental" +
+			";hb=" +
+			linenr_commit +
+			";f=" +
+			encodeURIComponent(linenr_filename) +
+			"#l" +
+			(group.srcline + i);
 
 		blamedLines++;
 
@@ -1311,11 +1351,11 @@ function handleLine(commit, group) {
  */
 var sha1Re = /^([0-9a-f]{40}) ([0-9]+) ([0-9]+) ([0-9]+)/;
 var infoRe = /^([a-z-]+) ?(.*)/;
-var endRe  = /^END ?([^ ]*) ?(.*)/;
+var endRe = /^END ?([^ ]*) ?(.*)/;
 /**@-*/
 
 var curCommit = new Commit();
-var curGroup  = {};
+var curGroup = {};
 
 /**
  * Parse output from 'git blame --incremental [...]', received via
@@ -1331,12 +1371,11 @@ function processBlameLines(lines) {
 	var match;
 
 	for (var i = 0, len = lines.length; i < len; i++) {
-
 		if ((match = sha1Re.exec(lines[i]))) {
 			var sha1 = match[1];
-			var srcline  = parseInt(match[2], 10);
-			var resline  = parseInt(match[3], 10);
-			var numlines = parseInt(match[4], 10);
+			var srcline = Number.parseInt(match[2], 10);
+			var resline = Number.parseInt(match[3], 10);
+			var numlines = Number.parseInt(match[4], 10);
 
 			var c = commits[sha1];
 			if (!c) {
@@ -1348,49 +1387,44 @@ function processBlameLines(lines) {
 			curGroup.srcline = srcline;
 			curGroup.resline = resline;
 			curGroup.numlines = numlines;
-
 		} else if ((match = infoRe.exec(lines[i]))) {
 			var info = match[1];
 			var data = match[2];
 			switch (info) {
-			case 'filename':
-				curCommit.filename = unquote(data);
-				// 'filename' information terminates the entry
-				handleLine(curCommit, curGroup);
-				updateProgressInfo();
-				break;
-			case 'author':
-				curCommit.author = data;
-				break;
-			case 'author-time':
-				curCommit.authorTime = parseInt(data, 10);
-				break;
-			case 'author-tz':
-				curCommit.authorTimezone = data;
-				break;
-			case 'previous':
-				curCommit.nprevious++;
-				// store only first 'previous' header
-				if (!'previous' in curCommit) {
-					var parts = data.split(' ', 2);
-					curCommit.previous    = parts[0];
-					curCommit.file_parent = unquote(parts[1]);
-				}
-				break;
-			case 'boundary':
-				curCommit.boundary = true;
-				break;
+				case "filename":
+					curCommit.filename = unquote(data);
+					// 'filename' information terminates the entry
+					handleLine(curCommit, curGroup);
+					updateProgressInfo();
+					break;
+				case "author":
+					curCommit.author = data;
+					break;
+				case "author-time":
+					curCommit.authorTime = Number.parseInt(data, 10);
+					break;
+				case "author-tz":
+					curCommit.authorTimezone = data;
+					break;
+				case "previous":
+					curCommit.nprevious++;
+					// store only first 'previous' header
+					if ((!"previous") in curCommit) {
+						var parts = data.split(" ", 2);
+						curCommit.previous = parts[0];
+						curCommit.file_parent = unquote(parts[1]);
+					}
+					break;
+				case "boundary":
+					curCommit.boundary = true;
+					break;
 			} // end switch
-
 		} else if ((match = endRe.exec(lines[i]))) {
 			t_interval_server = match[1];
 			cmds_server = match[2];
-
-		} else if (lines[i] !== '') {
+		} else if (lines[i] !== "") {
 			// malformed line
-
 		} // end if (match)
-
 	} // end for (lines)
 }
 
@@ -1402,9 +1436,9 @@ function processBlameLines(lines) {
  * @return {Number} end of processed data (new value for nextReadPos)
  */
 function processData(unprocessed, nextReadPos) {
-	var lastLineEnd = unprocessed.lastIndexOf('\n');
+	var lastLineEnd = unprocessed.lastIndexOf("\n");
 	if (lastLineEnd !== -1) {
-		var lines = unprocessed.substring(0, lastLineEnd).split('\n');
+		var lines = unprocessed.substring(0, lastLineEnd).split("\n");
 		nextReadPos += lastLineEnd + 1 /* 1 == '\n'.length */;
 
 		processBlameLines(lines);
@@ -1422,8 +1456,12 @@ function processData(unprocessed, nextReadPos) {
  * @globals commits
  */
 function handleError(xhr) {
-	errorInfo('Server error: ' +
-		xhr.status + ' - ' + (xhr.statusText || 'Error contacting server'));
+	errorInfo(
+		"Server error: " +
+			xhr.status +
+			" - " +
+			(xhr.statusText || "Error contacting server"),
+	);
 
 	if (typeof xhr.pollTimer === "number") {
 		clearTimeout(xhr.pollTimer);
@@ -1462,7 +1500,6 @@ function responseLoaded(xhr) {
  * @param {Boolean} fromTimer: if handler was called from timer
  */
 function handleResponse(xhr, fromTimer) {
-
 	/*
 	 * xhr.readyState
 	 *
@@ -1499,7 +1536,6 @@ function handleResponse(xhr, fromTimer) {
 		return;
 	}
 
-
 	// extract new whole (complete) lines, and process them
 	if (xhr.prevDataLength !== xhr.responseText.length) {
 		xhr.prevDataLength = xhr.responseText.length;
@@ -1516,10 +1552,9 @@ function handleResponse(xhr, fromTimer) {
 	// if we get from timer, we have to restart it
 	// otherwise onreadystatechange gives us partial response, timer not needed
 	if (fromTimer) {
-		setTimeout(function () {
+		setTimeout(() => {
 			handleResponse(xhr, true);
 		}, 1000);
-
 	} else if (typeof xhr.pollTimer === "number") {
 		clearTimeout(xhr.pollTimer);
 		delete xhr.pollTimer;
@@ -1539,39 +1574,38 @@ function handleResponse(xhr, fromTimer) {
  * file contents, a base for blame view.
  *
  * @globals t0, projectUrl, div_progress_bar, totalLines
-*/
+ */
 function startBlame(blamedataUrl, bUrl) {
-
 	var xhr = createRequestObject();
 	if (!xhr) {
-		errorInfo('ERROR: XMLHttpRequest not supported');
+		errorInfo("ERROR: XMLHttpRequest not supported");
 		return;
 	}
 
 	t0 = new Date();
-	projectUrl = bUrl + (bUrl.indexOf('?') === -1 ? '?' : ';');
-	if ((div_progress_bar = document.getElementById('progress_bar'))) {
+	projectUrl = bUrl + (bUrl.indexOf("?") === -1 ? "?" : ";");
+	if ((div_progress_bar = document.getElementById("progress_bar"))) {
 		//div_progress_bar.setAttribute('style', 'width: 100%;');
-		div_progress_bar.style.cssText = 'width: 100%;';
+		div_progress_bar.style.cssText = "width: 100%;";
 	}
 	totalLines = countLines();
 	updateProgressInfo();
 
 	/* add extra properties to xhr object to help processing response */
-	xhr.prevDataLength = -1;  // used to detect if we have new data
-	xhr.nextReadPos = 0;      // where unread part of response starts
+	xhr.prevDataLength = -1; // used to detect if we have new data
+	xhr.nextReadPos = 0; // where unread part of response starts
 
-	xhr.onreadystatechange = function () {
+	xhr.onreadystatechange = () => {
 		handleResponse(xhr, false);
 	};
 
-	xhr.open('GET', blamedataUrl);
-	xhr.setRequestHeader('Accept', 'text/plain');
+	xhr.open("GET", blamedataUrl);
+	xhr.setRequestHeader("Accept", "text/plain");
 	xhr.send(null);
 
 	// not all browsers call onreadystatechange event on each server flush
 	// poll response using timer every second to handle this issue
-	xhr.pollTimer = setTimeout(function () {
+	xhr.pollTimer = setTimeout(() => {
 		handleResponse(xhr, true);
 	}, 1000);
 }

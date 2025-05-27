@@ -8,12 +8,11 @@ var lnk_path = argv.item(argi++);
 var ico_path = argi < argv.length ? argv.item(argi++) : undefined;
 var dir_path = argi < argv.length ? argv.item(argi++) : undefined;
 var lnk_exec = argi < argv.length ? argv.item(argi++) : undefined;
-var lnk_args = '';
+var lnk_args = "";
 while (argi < argv.length) {
 	var s = argv.item(argi++);
-	if (lnk_args != '')
-		lnk_args += ' ';
-	if (s.indexOf(' ') >= 0) {
+	if (lnk_args != "") lnk_args += " ";
+	if (s.indexOf(" ") >= 0) {
 		lnk_args += '"';
 		lnk_args += s;
 		lnk_args += '"';

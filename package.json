@@ -1,6 +1,6 @@
 {
-  "name": "git-it-electron",
-  "version": "4.3.0",
+  "name": "git-it-nx",
+  "version": "5.0.0",
   "description": "An open source desktop app for learning Git and GitHub",
   "keywords": [
     "Git",
@@ -13,38 +13,42 @@
   ],
   "productName": "Git-it",
   "main": "main.js",
+  "type": "module",
   "scripts": {
-    "prestart": "npm run build-all",
+    "dev": "vite",
+    "build": "rollup -c",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "format": "biome format .",
     "start": "electron .",
-    "test": "standard lib/*.js lib/verify/*.js menus/*.js main.js",
-    "clean": "rimraf built/*",
-    "build-chals": "node lib/build-challenges.js",
-    "build-pages": "node lib/build-pages.js",
-    "build-all": "npm run clean && npm run build-chals && npm run build-pages",
-    "pack-mac": "electron-packager . Git-it --platform=darwin --arch=x64   --icon=assets/git-it.icns --overwrite --ignore=/out/ --ignore=assets/PortableGit --ignore=resources/ --prune=true --out=out",
-    "pack-lin": "electron-packager . Git-it --platform=linux  --arch=x64   --icon=assets/git-it.png  --overwrite --ignore=/out/ --ignore=assets/PortableGit --ignore=resources/ --prune=true --out=out",
-    "pack-win": "electron-packager . Git-it --platform=win32  --arch=ia32  --icon=assets/git-it.ico  --overwrite --ignore=/out/ --ignore=resources/ --prune=true --out=out "
+    "dist": "electron-builder"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jlord/git-it-electron.git"
+    "url": "https://github.com/sm-moshi/git-it-nx.git"
   },
   "author": "Jessica Lord",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/jlord/git-it-electron/issues"
+    "url": "https://github.com/sm-moshi/git-it-nx/issues"
   },
-  "homepage": "https://github.com/jlord/git-it-electron",
+  "homepage": "https://github.com/sm-moshi/git-it-nx",
   "devDependencies": {
-    "electron": "^1.4.3",
-    "electron-packager": "^8.0.0",
-    "rimraf": "^2.5.4",
-    "standard": "^5.4.1"
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "16.0.1",
+    "@rollup/plugin-swc": "^0.4.0",
+    "@types/node": "^20.17.50",
+    "biome": "^0.3.3",
+    "electron": "^36.3.1",
+    "electron-builder": "^26.0.15",
+    "rollup": "^4.41.1",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
   },
   "dependencies": {
     "cheerio": "^1.0.0",
-    "glob": "^5.0.5",
-    "handlebars": "^3.0.3",
-    "request": "^2.57.0"
-  }
+    "glob": "^11.0.2",
+    "handlebars": "^4.7.8"
+  },
+  "packageManager": "pnpm@10.11.0"
 }
