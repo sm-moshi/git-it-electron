@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "cheerio": "^1.0.0",
-    "glob": "^5.0.5",
+    "glob": "^11.0.2",
     "handlebars": "^3.0.3",
     "request": "^2.57.0"
   }
