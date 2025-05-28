@@ -8,11 +8,11 @@ import * as path from "node:path";
 import * as Handlebars from "handlebars";
 import {
 	getAvaiableLocales,
-	getLocaleResourcesPath,
+	getFallbackLocale,
 	getLocaleBuiltPath,
 	getLocaleMenu,
-	getFallbackLocale,
-} from "../packages/i18n/src/getLocale";
+	getLocaleResourcesPath,
+} from "../packages/i18n/src/getLocale.js";
 
 const langs = getAvaiableLocales();
 
@@ -33,7 +33,8 @@ for (const lang of langs) {
 	// If folder not exist, create it
 	try {
 		fs.accessSync(output);
-	} catch (e) {
+	} catch {
+		// Exception intentionally ignored: directory doesn't exist, create it
 		fs.mkdirSync(output);
 	}
 	const pageFiles = fs.readdirSync(input);
@@ -42,7 +43,7 @@ for (const lang of langs) {
 
 function buildPages(files: string[], lang: string): void {
 	for (const file of files) {
-		if (!file.match("html")) return;
+		if (!/html/.exec(file)) return;
 		let final = "";
 		if (file === "index.html") {
 			final = buildIndex(file, lang);
@@ -94,7 +95,9 @@ function getPartial(filename: string, lang: string): string {
 		);
 		fs.statSync(pos);
 		return pos;
-	} catch (e) {
+	} catch {
+		// Exception intentionally ignored: file doesn't exist for this locale,
+		// fall back to default locale
 		return path.join(
 			getLocaleResourcesPath(getFallbackLocale()),
 			`partials/${filename}.html`,

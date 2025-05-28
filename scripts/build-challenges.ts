@@ -9,13 +9,16 @@ import * as glob from "glob";
 import * as Handlebars from "handlebars";
 import {
 	getAvaiableLocales,
-	getLocaleBuiltPath,
-	getLocaleResourcesPath,
-	getLocaleMenu,
 	getFallbackLocale,
-} from "../packages/i18n/src/getLocale";
-// TODO: Update this import when translate-locale is migrated to TS
-// import translateLocale from "../packages/i18n/src/translate-locale";
+	getLocaleBuiltPath,
+	getLocaleMenu,
+	getLocaleResourcesPath,
+} from "../packages/i18n/src/getLocale.js";
+import { translateLocale } from "../packages/i18n/src/translate-locale.js";
+import type {
+	ChallengeContent,
+	PreviousData,
+} from "../packages/types/src/build-types.js";
 
 const layout = fs
 	.readFileSync(
@@ -29,37 +32,32 @@ const langs = getAvaiableLocales();
 let input = "";
 let output = "";
 
-// If built not exist, create one
+// If built directory doesn't exist, create one
 try {
 	fs.accessSync(path.join(getLocaleBuiltPath(langs[0]), ".."));
-} catch (e) {
+} catch {
+	// Directory doesn't exist, create it
 	fs.mkdirSync(path.join(getLocaleBuiltPath(langs[0]), ".."));
 }
 
 for (const lang of langs) {
-	// If locale folder not exist, create one.
+	// If locale folder doesn't exist, create one
 	try {
 		fs.accessSync(getLocaleBuiltPath(lang));
-	} catch (e) {
+	} catch {
+		// Directory doesn't exist, create it
 		fs.mkdirSync(getLocaleBuiltPath(lang));
 	}
 	input = path.join(getLocaleResourcesPath(lang), "challenges");
 	output = path.join(getLocaleBuiltPath(lang), "challenges");
 	try {
 		fs.accessSync(output);
-	} catch (e) {
+	} catch {
+		// Directory doesn't exist, create it
 		fs.mkdirSync(output);
 	}
 	files = glob.sync("*.html", { cwd: input });
 	buildChallenges(files, lang);
-}
-
-interface ChallengeContent {
-	header: string;
-	sidebar: string;
-	footer: string;
-	body: string;
-	shortname: string;
 }
 
 function buildChallenges(files: string[], lang: string): void {
@@ -75,10 +73,9 @@ function buildChallenges(files: string[], lang: string): void {
 			shortname,
 		};
 
-		// TODO: Uncomment and fix when translateLocale is migrated
-		// if (lang && lang !== "en-US") {
-		// 	content.body = translateLocale(content.body, lang);
-		// }
+		if (lang && lang !== "en-US") {
+			content.body = translateLocale(content.body, lang);
+		}
 
 		const template = Handlebars.compile(layout);
 		const final = template(content);
@@ -88,15 +85,12 @@ function buildChallenges(files: string[], lang: string): void {
 }
 
 function makeShortname(filename: string): string {
-	// TODO: BEFORE guide/challenge-content/10_merge_tada.html
-	// TODO: AFTER  merge_tada
+	// Transforms filename format:
+	// FROM: guide/challenge-content/10_merge_tada.html
+	// TO:   merge_tada
 	const parts = filename.split("/");
 	const last = parts.length > 0 ? parts[parts.length - 1] : "";
-	return last
-		.split("_")
-		.slice(1)
-		.join("_")
-		.replace("html", "");
+	return last.split("_").slice(1).join("_").replace("html", "");
 }
 
 function makeTitleName(filename: string, lang: string): string {
@@ -169,14 +163,6 @@ function grammarize(name: string, _lang: string): string {
 		}
 	});
 	return correct;
-}
-
-interface PreviousData {
-	prename: string;
-	preurl: string;
-	nextname: string;
-	nexturl: string;
-	lang?: string;
 }
 
 function buildFooter(file: string, lang: string): string {
@@ -254,7 +240,8 @@ function getPartial(filename: string, lang: string): string {
 		);
 		fs.statSync(pos);
 		return pos;
-	} catch (e) {
+	} catch {
+		// File doesn't exist for this locale, fall back to default locale
 		return path.join(
 			getLocaleResourcesPath(getFallbackLocale()),
 			`partials/${filename}.html`,
