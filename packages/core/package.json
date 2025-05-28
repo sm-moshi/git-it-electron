@@ -1,27 +1,27 @@
 {
-  "name": "@git-it-nx/core",
-  "version": "1.0.0",
-  "description": "Core logic for git-it-nx",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
-  },
-  "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch"
-  },
-  "dependencies": {
-    "@git-it-nx/git": "workspace:*",
-    "@git-it-nx/types": "workspace:*",
-    "electron": "^36.3.1"
-  },
-  "devDependencies": {
-    "@types/node": "^20.17.50",
-    "typescript": "^5.8.3"
-  }
+	"name": "@git-it-nx/core",
+	"version": "0.1.0",
+	"description": "Core logic for git-it-nx",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch"
+	},
+	"dependencies": {
+		"@git-it-nx/git": "workspace:*",
+		"@git-it-nx/types": "workspace:*",
+		"electron": "^36.3.1"
+	},
+	"devDependencies": {
+		"@types/node": "20.17.51",
+		"typescript": "^5.8.3"
+	}
 }

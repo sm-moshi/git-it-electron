@@ -6,102 +6,135 @@
 
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { ipcRenderer } from "electron";
+
 import type { UserData } from "./user-data.js";
 import { getData } from "./user-data.js";
 
-document.addEventListener("DOMContentLoaded", () => {
-  const data = getData();
+document.addEventListener("DOMContentLoaded", async () => {
+	const data = await getData();
 
-  // Buttons
-  const clearAllButtons = document.querySelectorAll<HTMLButtonElement>(".js-clear-all-challenges");
-  const leftOffButton = document.getElementById("left-off-from") as HTMLAnchorElement | null;
+	// Buttons
+	const clearAllButtons = document.querySelectorAll<HTMLButtonElement>(
+		".js-clear-all-challenges",
+	);
+	const leftOffButton = document.getElementById(
+		"left-off-from",
+	) as HTMLAnchorElement | null;
 
-  // Sections
-  const showFirstRun = document.getElementById("show-first-run") as HTMLElement | null;
-  const showWipRun = document.getElementById("show-wip-run") as HTMLElement | null;
-  const showFinishedRun = document.getElementById("show-finished-run") as HTMLElement | null;
+	// Sections
+	const showFirstRun = document.getElementById("show-first-run");
+	const showWipRun = document.getElementById("show-wip-run");
+	const showFinishedRun = document.getElementById("show-finished-run");
 
-  updateIndex(data.contents);
+	updateIndex(data.contents);
 
-  // Listen for Clear All Button Events, trigger confirmation dialog
-  clearAllButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      ipcRenderer.send("confirm-clear");
-    });
-  });
+	// Listen for Clear All Button Events, trigger confirmation dialog
+	clearAllButtons.forEach((button) => {
+		button.addEventListener("click", async () => {
+			const response = await window.api.confirmClear();
+			if (response === 1) return; // User clicked "No"
+			clearAllChallenges(data);
+		});
+	});
 
-  ipcRenderer.on("confirm-clear-response", (event, response: number) => {
-    if (response === 1) return;
-    else clearAllChallenges(data);
-  });
+	/**
+	 * Show the first run UI state
+	 */
+	function showFirstRunState(): void {
+		if (showFirstRun) showFirstRun.style.display = "block";
+		if (showWipRun) showWipRun.style.display = "none";
+		if (showFinishedRun) showFinishedRun.style.display = "none";
+	}
 
-  /**
-   * Go through each challenge in user data to see which are completed
-   */
-  function updateIndex(challengeData: Record<string, any>): void {
-    const circles = document.querySelectorAll<HTMLElement>(".progress-circle");
-    let counter = 0;
-    let completed = 0;
+	/**
+	 * Show the work in progress UI state
+	 */
+	function showWipState(): void {
+		if (showWipRun) showWipRun.style.display = "block";
+		if (showFirstRun) showFirstRun.style.display = "none";
+		if (showFinishedRun) showFinishedRun.style.display = "none";
+	}
 
-    for (const challengeKey in challengeData) {
-      if (challengeData[challengeKey]?.completed) {
-        // A challenge is completed so show the WIP run HTML
-        if (showWipRun) showWipRun.style.display = "block";
-        if (showFirstRun) showFirstRun.style.display = "none";
-        if (showFinishedRun) showFinishedRun.style.display = "none";
+	/**
+	 * Show the all completed UI state
+	 */
+	function showCompletedState(): void {
+		if (showFirstRun) showFirstRun.style.display = "none";
+		if (showWipRun) showWipRun.style.display = "none";
+		if (showFinishedRun) showFinishedRun.style.display = "block";
+	}
 
-        // Mark the corresponding circle as completed
-        circles[counter]?.classList.add("completed");
+	/**
+	 * Handle a completed challenge
+	 */
+	function handleCompletedChallenge(
+		challengeData: Record<string, any>,
+		challengeKey: string,
+		circles: NodeListOf<HTMLElement>,
+		counter: number,
+	): void {
+		showWipState();
 
-        // Show the button to go to next challenge
-        if (leftOffButton) {
-          leftOffButton.href = path.join(
-            __dirname,
-            "..",
-            "challenges",
-            `${challengeData[challengeKey].next_challenge}.html`
-          );
-        }
-        completed++;
-        counter++;
-      } else {
-        counter++;
-      }
-    }
+		// Mark the corresponding circle as completed
+		circles[counter]?.classList.add("completed");
 
-    if (completed === 0) {
-      // No challenges are complete, show the first run HTML
-      if (showFirstRun) showFirstRun.style.display = "block";
-      if (showWipRun) showWipRun.style.display = "none";
-      if (showFinishedRun) showFinishedRun.style.display = "none";
-    }
+		// Show the button to go to next challenge
+		if (leftOffButton && challengeData[challengeKey].next_challenge) {
+			leftOffButton.href = path.join(
+				__dirname,
+				"..",
+				"challenges",
+				`${challengeData[challengeKey].next_challenge}.html`,
+			);
+		}
+	}
 
-    if (completed === Object.keys(challengeData).length) {
-      // All of the challenges are complete! Show the finished run HTML
-      if (showFirstRun) showFirstRun.style.display = "none";
-      if (showWipRun) showWipRun.style.display = "none";
-      if (showFinishedRun) showFinishedRun.style.display = "block";
-    }
-  }
+	/**
+	 * Update UI based on completion count
+	 */
+	function updateUIState(completed: number, totalChallenges: number): void {
+		if (completed === 0) {
+			showFirstRunState();
+		} else if (completed === totalChallenges) {
+			showCompletedState();
+		}
+		// WIP state is already shown in handleCompletedChallenge
+	}
 
-  function clearAllChallenges(userData: UserData): void {
-    for (const challengeKey in userData.contents) {
-      if (userData.contents[challengeKey]?.completed) {
-        userData.contents[challengeKey].completed = false;
-      }
-    }
+	/**
+	 * Go through each challenge in user data to see which are completed
+	 */
+	function updateIndex(challengeData: Record<string, any>): void {
+		const circles = document.querySelectorAll<HTMLElement>(".progress-circle");
+		let counter = 0;
+		let completed = 0;
 
-    fs.writeFileSync(userData.path, JSON.stringify(userData.contents, null, 2));
+		for (const challengeKey in challengeData) {
+			if (challengeData[challengeKey]?.completed) {
+				handleCompletedChallenge(challengeData, challengeKey, circles, counter);
+				completed++;
+			}
+			counter++;
+		}
 
-    // If they clear all challenges, go back to first run HTML
-    const circles = document.querySelectorAll<HTMLElement>(".progress-circle");
-    circles.forEach((circle) => {
-      circle.classList.remove("completed");
-    });
+		updateUIState(completed, Object.keys(challengeData).length);
+	}
 
-    if (showFirstRun) showFirstRun.style.display = "block";
-    if (showWipRun) showWipRun.style.display = "none";
-    if (showFinishedRun) showFinishedRun.style.display = "none";
-  }
+	function clearAllChallenges(userData: UserData): void {
+		for (const challengeKey in userData.contents) {
+			if (userData.contents[challengeKey]?.completed) {
+				userData.contents[challengeKey].completed = false;
+			}
+		}
+
+		fs.writeFileSync(userData.path, JSON.stringify(userData.contents, null, 2));
+
+		// If they clear all challenges, go back to first run HTML
+		const circles = document.querySelectorAll<HTMLElement>(".progress-circle");
+		circles.forEach((circle) => {
+			circle.classList.remove("completed");
+		});
+
+		showFirstRunState();
+	}
 });

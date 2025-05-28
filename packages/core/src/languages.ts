@@ -6,15 +6,14 @@
 //
 
 // Selecting the current locale
-var selector = document.getElementById("lang-select");
+const selector = document.getElementById("lang-select") as HTMLSelectElement;
 
-// TODO: add change listener
 selector.addEventListener("change", (event) => {
 	// Go to page in the locale specified
-	var location = window.location;
-	var url = location.href.replace(
+	const location = window.location;
+	const url = location.href.replace(
 		/built\/([a-z]{2}-[A-Z]{2})/,
-		"built/" + selector.value,
+		`built/${selector.value}`,
 	);
 	location.href = url;
 });
