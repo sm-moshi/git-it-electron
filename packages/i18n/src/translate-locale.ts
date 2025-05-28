@@ -1,19 +1,18 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
-import * as cheerio from "cheerio";
+import type { Translations } from "../../types/src/i18n-types.js";
 
-interface Translations {
-	n: Record<string, string>;
-	v: Record<string, string>;
-	adj: Record<string, string>;
-}
+// Using require for cheerio to work around module resolution issues
+const cheerio = require("cheerio");
 
 export function translateLocale(fileContent: string, lang: string): string {
 	if (!lang) return fileContent;
 
 	// get translation data
 	const localePath = path.join(__dirname, `locale-${lang}.json`);
-	const translations: Translations = JSON.parse(fs.readFileSync(localePath, "utf-8"));
+	const translations: Translations = JSON.parse(
+		fs.readFileSync(localePath, "utf-8"),
+	);
 
 	// load file into Cheerio
 	const $ = cheerio.load(fileContent);
@@ -21,7 +20,7 @@ export function translateLocale(fileContent: string, lang: string): string {
 	const types: Array<keyof Translations> = ["n", "v", "adj"];
 
 	types.forEach((type) => {
-		$(type).each((_i, tag) => {
+		$(type).each((index: number, tag: Element) => {
 			const word = $(tag).text().toLowerCase();
 			const translation = translations[type][word];
 			if (!translation) {
