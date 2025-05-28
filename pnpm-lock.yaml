@@ -28,8 +28,8 @@ importers:
         specifier: ^0.4.0
         version: 0.4.0(@swc/core@1.11.29)(rollup@4.41.1)
       '@types/node':
-        specifier: ^20.17.50
-        version: 20.17.50
+        specifier: 20.17.51
+        version: 20.17.51
       biome:
         specifier: ^0.3.3
         version: 0.3.3
@@ -47,7 +47,7 @@ importers:
         version: 5.8.3
       vite:
         specifier: ^6.3.5
-        version: 6.3.5(@types/node@20.17.50)
+        version: 6.3.5(@types/node@20.17.51)
 
   apps/renderer:
     dependencies:
@@ -84,8 +84,8 @@ importers:
         version: 36.3.1
     devDependencies:
       '@types/node':
-        specifier: ^20.17.50
-        version: 20.17.50
+        specifier: 20.17.51
+        version: 20.17.51
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -97,8 +97,8 @@ importers:
         version: link:../types
     devDependencies:
       '@types/node':
-        specifier: ^20.17.50
-        version: 20.17.50
+        specifier: 20.17.51
+        version: 20.17.51
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -106,8 +106,8 @@ importers:
   packages/types:
     devDependencies:
       '@types/node':
-        specifier: ^20.17.50
-        version: 20.17.50
+        specifier: 20.17.51
+        version: 20.17.51
       electron:
         specifier: ^36.3.1
         version: 36.3.1
@@ -724,8 +724,8 @@ packages:
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
 
-  '@types/node@20.17.50':
-    resolution: {integrity: sha512-Mxiq0ULv/zo1OzOhwPqOA13I81CV/W3nvd3ChtQZRT5Cwz3cr0FKo/wMSsbTqL3EXpaBAEQhva2B8ByRkOIh9A==}
+  '@types/node@20.17.51':
+    resolution: {integrity: sha512-hccptBl7C8lHiKxTBsY6vYYmqpmw1E/aGR/8fmueE+B390L3pdMOpNSRvFO4ZnXzW5+p2HBXV0yNABd2vdk22Q==}
 
   '@types/node@22.15.21':
     resolution: {integrity: sha512-EV/37Td6c+MgKAbkcLG6vqZ2zEYHD7bvSrzqqs2RIhbA6w3x+Dqz8MZM3sP6kGTeLrdoOgKZe+Xja7tUB2DNkQ==}
@@ -3064,7 +3064,7 @@ snapshots:
     dependencies:
       '@types/http-cache-semantics': 4.0.4
       '@types/keyv': 3.1.4
-      '@types/node': 20.17.50
+      '@types/node': 20.17.51
       '@types/responselike': 1.0.3
 
   '@types/debug@4.1.12':
@@ -3075,17 +3075,17 @@ snapshots:
 
   '@types/fs-extra@9.0.13':
     dependencies:
-      '@types/node': 20.17.50
+      '@types/node': 20.17.51
 
   '@types/http-cache-semantics@4.0.4': {}
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 20.17.50
+      '@types/node': 20.17.51
 
   '@types/ms@2.1.0': {}
 
-  '@types/node@20.17.50':
+  '@types/node@20.17.51':
     dependencies:
       undici-types: 6.19.8
 
@@ -3095,7 +3095,7 @@ snapshots:
 
   '@types/plist@3.0.5':
     dependencies:
-      '@types/node': 20.17.50
+      '@types/node': 20.17.51
       xmlbuilder: 15.1.1
     optional: true
 
@@ -3111,14 +3111,14 @@ snapshots:
 
   '@types/responselike@1.0.3':
     dependencies:
-      '@types/node': 20.17.50
+      '@types/node': 20.17.51
 
   '@types/verror@1.10.11':
     optional: true
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 20.17.50
+      '@types/node': 20.17.51
     optional: true
 
   '@vitejs/plugin-react@4.5.0(vite@6.3.5(@types/node@22.15.21))':
@@ -5042,7 +5042,7 @@ snapshots:
       extsprintf: 1.4.1
     optional: true
 
-  vite@6.3.5(@types/node@20.17.50):
+  vite@6.3.5(@types/node@20.17.51):
     dependencies:
       esbuild: 0.25.5
       fdir: 6.4.4(picomatch@4.0.2)
@@ -5051,7 +5051,7 @@ snapshots:
       rollup: 4.41.1
       tinyglobby: 0.2.14
     optionalDependencies:
-      '@types/node': 20.17.50
+      '@types/node': 20.17.51
       fsevents: 2.3.3
 
   vite@6.3.5(@types/node@22.15.21):

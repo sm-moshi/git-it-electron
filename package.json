@@ -1,54 +1,54 @@
 {
-  "name": "git-it-nx",
-  "version": "5.0.0",
-  "description": "An open source desktop app for learning Git and GitHub",
-  "keywords": [
-    "Git",
-    "GitHub",
-    "Git-it",
-    "tutorial",
-    "guide",
-    "learn",
-    "desktop"
-  ],
-  "productName": "Git-it",
-  "main": "main.js",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "rollup -c",
-    "typecheck": "tsc --noEmit",
-    "lint": "biome check .",
-    "format": "biome format .",
-    "start": "electron .",
-    "dist": "electron-builder"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sm-moshi/git-it-nx.git"
-  },
-  "author": "Jessica Lord",
-  "license": "BSD-2-Clause",
-  "bugs": {
-    "url": "https://github.com/sm-moshi/git-it-nx/issues"
-  },
-  "homepage": "https://github.com/sm-moshi/git-it-nx",
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^28.0.3",
-    "@rollup/plugin-node-resolve": "16.0.1",
-    "@rollup/plugin-swc": "^0.4.0",
-    "@types/node": "^20.17.50",
-    "biome": "^0.3.3",
-    "electron": "^36.3.1",
-    "electron-builder": "^26.0.15",
-    "rollup": "^4.41.1",
-    "typescript": "^5.8.3",
-    "vite": "^6.3.5"
-  },
-  "dependencies": {
-    "cheerio": "^1.0.0",
-    "glob": "^11.0.2",
-    "handlebars": "^4.7.8"
-  },
-  "packageManager": "pnpm@10.11.0"
+	"name": "git-it-nx",
+	"version": "5.0.0",
+	"description": "An open source desktop app for learning Git and GitHub",
+	"keywords": [
+		"Git",
+		"GitHub",
+		"Git-it",
+		"tutorial",
+		"guide",
+		"learn",
+		"desktop"
+	],
+	"productName": "Git-it",
+	"main": "dist/desktop/main.js",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "rollup -c",
+		"typecheck": "tsc --noEmit",
+		"lint": "biome check --write .",
+		"format": "biome format --write .",
+		"start": "electron .",
+		"dist": "electron-builder"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/sm-moshi/git-it-nx.git"
+	},
+	"author": "Jessica Lord",
+	"license": "BSD-2-Clause",
+	"bugs": {
+		"url": "https://github.com/sm-moshi/git-it-nx/issues"
+	},
+	"homepage": "https://github.com/sm-moshi/git-it-nx",
+	"devDependencies": {
+		"@rollup/plugin-commonjs": "^28.0.3",
+		"@rollup/plugin-node-resolve": "16.0.1",
+		"@rollup/plugin-swc": "^0.4.0",
+		"@types/node": "20.17.51",
+		"biome": "^0.3.3",
+		"electron": "^36.3.1",
+		"electron-builder": "^26.0.15",
+		"rollup": "^4.41.1",
+		"typescript": "^5.8.3",
+		"vite": "^6.3.5"
+	},
+	"dependencies": {
+		"cheerio": "^1.0.0",
+		"glob": "^11.0.2",
+		"handlebars": "^4.7.8"
+	},
+	"packageManager": "pnpm@10.11.0"
 }
