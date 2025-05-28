@@ -1,12 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 
+import { BrowserWindow, Menu, app, dialog, ipcMain } from "electron";
 import {
 	getLocale,
 	getLocaleBuiltPath,
 	// TODO: Add other functions, that you need
-} from "../../../packages/i18n/src/getLocale";
-import { app, BrowserWindow, Menu, ipcMain, dialog } from "electron";
+} from "../../../packages/i18n/src/getLocale.js";
 
 import darwinTemplate from "./menus/darwin-menu.js";
 
@@ -34,6 +34,11 @@ app.on("ready", function appReady() {
 		height: 760,
 		title: "Git-it",
 		icon: iconPath,
+		webPreferences: {
+			nodeIntegration: false,
+			contextIsolation: true,
+			preload: path.join(__dirname, "preload.js"),
+		},
 	});
 
 	const appPath = app.getPath("userData");
@@ -54,32 +59,26 @@ app.on("ready", function appReady() {
 		setAllChallengesComplete(userDataPath);
 	}
 
-	fs.exists(userDataPath, (exists: boolean) => {
-		if (!exists) {
-			fs.writeFile(
-				userDataPath,
-				JSON.stringify(emptyData, null, " "),
-				(err) => {
-					if (err) return console.log(err);
-				},
-			);
-		}
-	});
+	if (!fs.existsSync(userDataPath)) {
+		fs.writeFile(
+			userDataPath,
+			JSON.stringify(emptyData, null, " "),
+			(err) => {
+				if (err) return console.log(err);
+			},
+		);
+	}
 
-	fs.exists(userSavedDir, (exists: boolean) => {
-		if (!exists) {
-			fs.writeFile(
-				userSavedDir,
-				JSON.stringify(emptySavedDir, null, " "),
-				(err) => {
-					if (err) return console.log(err);
-				},
-			);
-		}
-	});
-	mainWindow.loadURL(
-		`file://${getLocaleBuiltPath(language)}/pages/index.html`,
-	);
+	if (!fs.existsSync(userSavedDir)) {
+		fs.writeFile(
+			userSavedDir,
+			JSON.stringify(emptySavedDir, null, " "),
+			(err) => {
+				if (err) return console.log(err);
+			},
+		);
+	}
+	mainWindow.loadURL(`file://${getLocaleBuiltPath(language)}/pages/index.html`);
 
 	ipcMain.on("getUserDataPath", (event) => {
 		event.returnValue = userDataPath;
@@ -89,13 +88,13 @@ app.on("ready", function appReady() {
 		event.returnValue = userSavedDir;
 	});
 
-	ipcMain.on("open-file-dialog", (event) => {
+	ipcMain.on("open-file-dialog", async (event) => {
 		if (!mainWindow) return;
-		const files = dialog.showOpenDialog(mainWindow, {
+		const result = await dialog.showOpenDialog(mainWindow, {
 			properties: ["openFile", "openDirectory"],
 		});
-		if (files) {
-			event.sender.send("selected-directory", files);
+		if (!result.canceled && result.filePaths.length > 0) {
+			event.sender.send("selected-directory", result.filePaths);
 		}
 	});
 

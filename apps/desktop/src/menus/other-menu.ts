@@ -1,16 +1,24 @@
-import { App, BrowserWindow, shell, MenuItemConstructorOptions } from "electron";
 import * as path from "node:path";
 import {
-	getLocaleBuiltPath,
+	type App,
+	type BrowserWindow,
+	type MenuItemConstructorOptions,
+	shell,
+} from "electron";
+import {
 	getCurrentLocale,
+	getLocaleBuiltPath,
 	getLocaleMenu, // TODO: Don't we need this at some point?
-} from "../../../../packages/i18n/src/getLocale";
+} from "../../../../packages/i18n/src/getLocale.js";
 
 function isBrowserWindow(win: unknown): win is BrowserWindow {
 	return !!win && typeof (win as BrowserWindow).loadURL === "function";
 }
 
-export default function otherMenu(app: App, mainWindow: BrowserWindow | null): MenuItemConstructorOptions[] {
+export default function otherMenu(
+	app: App,
+	mainWindow: BrowserWindow | null,
+): MenuItemConstructorOptions[] {
 	return [
 		{
 			label: "&File",
@@ -85,7 +93,7 @@ export default function otherMenu(app: App, mainWindow: BrowserWindow | null): M
 							const filePath = path.join(
 								getLocaleBuiltPath(getCurrentLocale(focusedWindow)),
 								"pages",
-								"index.html"
+								"index.html",
 							);
 							focusedWindow.loadURL(`file://${filePath}`);
 						}
@@ -98,7 +106,7 @@ export default function otherMenu(app: App, mainWindow: BrowserWindow | null): M
 							const filePath = path.join(
 								getLocaleBuiltPath(getCurrentLocale(focusedWindow)),
 								"pages",
-								"dictionary.html"
+								"dictionary.html",
 							);
 							focusedWindow.loadURL(`file://${filePath}`);
 						}
@@ -111,7 +119,7 @@ export default function otherMenu(app: App, mainWindow: BrowserWindow | null): M
 							const filePath = path.join(
 								getLocaleBuiltPath(getCurrentLocale(focusedWindow)),
 								"pages",
-								"resources.html"
+								"resources.html",
 							);
 							focusedWindow.loadURL(`file://${filePath}`);
 						}
@@ -131,7 +139,9 @@ export default function otherMenu(app: App, mainWindow: BrowserWindow | null): M
 				{
 					label: "Open Issue",
 					click: () => {
-						shell.openExternal("https://github.com/jlord/git-it-electron/issues/new");
+						shell.openExternal(
+							"https://github.com/jlord/git-it-electron/issues/new",
+						);
 					},
 				},
 				{
@@ -141,7 +151,7 @@ export default function otherMenu(app: App, mainWindow: BrowserWindow | null): M
 							const filePath = path.join(
 								getLocaleBuiltPath(getCurrentLocale(focusedWindow)),
 								"pages",
-								"about.html"
+								"about.html",
 							);
 							focusedWindow.loadURL(`file://${filePath}`);
 						}
