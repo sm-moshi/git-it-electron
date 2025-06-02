@@ -39,7 +39,7 @@
 		"@rollup/plugin-swc": "^0.4.0",
 		"@types/node": "20.17.51",
 		"biome": "^0.3.3",
-		"electron": "^36.3.1",
+		"electron": "^36.3.2",
 		"electron-builder": "^26.0.15",
 		"rollup": "^4.41.1",
 		"typescript": "^5.8.3",

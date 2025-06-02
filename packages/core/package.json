@@ -18,7 +18,7 @@
 	"dependencies": {
 		"@git-it-nx/git": "workspace:*",
 		"@git-it-nx/types": "workspace:*",
-		"electron": "^36.3.1"
+		"electron": "^36.3.2"
 	},
 	"devDependencies": {
 		"@types/node": "20.17.51",
