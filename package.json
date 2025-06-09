@@ -46,7 +46,7 @@
 		"vite": "^6.3.5"
 	},
 	"dependencies": {
-		"cheerio": "^1.0.0",
+		"cheerio": "^1.1.0",
 		"glob": "^11.0.2",
 		"handlebars": "^4.7.8"
 	},
