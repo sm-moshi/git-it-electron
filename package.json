@@ -41,7 +41,7 @@
 		"biome": "^0.3.3",
 		"electron": "^36.3.1",
 		"electron-builder": "^26.0.15",
-		"rollup": "^4.41.1",
+		"rollup": "^4.42.0",
 		"typescript": "^5.8.3",
 		"vite": "^6.3.5"
 	},
