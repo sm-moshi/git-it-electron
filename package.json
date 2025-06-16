@@ -37,7 +37,7 @@
 		"@rollup/plugin-commonjs": "^28.0.3",
 		"@rollup/plugin-node-resolve": "16.0.1",
 		"@rollup/plugin-swc": "^0.4.0",
-		"@types/node": "20.17.51",
+		"@types/node": "24.0.1",
 		"biome": "^0.3.3",
 		"electron": "^36.3.1",
 		"electron-builder": "^26.0.15",

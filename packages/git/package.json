@@ -19,7 +19,7 @@
 		"@git-it-nx/types": "workspace:*"
 	},
 	"devDependencies": {
-		"@types/node": "20.17.51",
+		"@types/node": "24.0.1",
 		"typescript": "^5.8.3"
 	}
 }
